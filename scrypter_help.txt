@@ -1,0 +1,36 @@
+Scrypter Help
+=============
+
+Welcome to Scrypter! This application allows you to encrypt and decrypt files securely using a key.
+
+Buttons:
+--------
+
+1. Create Key
+   - Generates a new encryption key and saves it as a .key file.
+   - Use this key for encrypting and decrypting files.
+
+2. Encrypt
+   - Select a previously generated key (.key file).
+   - Choose the file you want to encrypt.
+   - The selected file will be encrypted using the key.
+
+3. Decrypt
+   - Select a previously generated key (.key file).
+   - Choose the file you want to decrypt.
+   - The selected file will be restored to its original form.
+
+4. Show Help
+   - Opens this help window.
+
+5. Exit
+   - Closes the Scrypter application.
+
+Notes:
+------
+- Keep your key file safe! Losing it means you cannot decrypt your files.
+- Always make a backup of important files before encrypting.
+- Encryption is done using Fernet (symmetric encryption) from the cryptography library.
+- Only files you select will be encrypted or decrypted.
+
+Enjoy using Scrypter!
