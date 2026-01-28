@@ -4,19 +4,19 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow,
                              QMessageBox, QFileDialog,
                              QPushButton, QLabel, QScrollArea)
 
-push_button_style = """ 
-        QPushButton {
-            background-color: gray; 
-            color: black; 
-            font-size: 20px; 
-            border: 2px none;
-            border-radius: 5px;
-        } 
-        """
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        push_button_style = """ 
+                QPushButton {
+                    background-color: gray; 
+                    color: black; 
+                    font-size: 20px; 
+                    border: 2px none;
+                    border-radius: 5px;
+                } 
+                """
 
         self.setWindowTitle("Scrypter")
         self.setGeometry(525, 250, 900, 600)
@@ -68,19 +68,25 @@ class MainWindow(QMainWindow):
         if not file_path:
             return
 
-        with open(file_path, "wb") as f:
-            key = Fernet.generate_key()
-            f.write(key)
-        QMessageBox.information(self, "The Key Was Saved", "Key Saved")
+        try:
+            with open(file_path, "wb") as f:
+                key = Fernet.generate_key()
+                f.write(key)
+            QMessageBox.information(self, "The Key Was Saved", "Key Saved")
+        except Exception as e:
+            QMessageBox.critical(self, "Failed to Save Key", f"Failed to save key to {file_path}:\n{str(e)}")
 
     def encrypt(self):
-        key_path, _ = QFileDialog.getOpenFileName(self, "Open Key File", "", "Key Files (*.key);;")
-        if not key_path:
-            return
+        try:
+            key_path, _ = QFileDialog.getOpenFileName(self, "Open Key File", "", "Key Files (*.key);;")
+            if not key_path:
+                return
 
-        with open(key_path, "rb") as f:
-            key = f.read()
-        QMessageBox.information(self, "Key Path Selected", "The Path of the Key was selected")
+            with open(key_path, "rb") as f:
+                key = f.read()
+            QMessageBox.information(self, "Key Path Selected", "The Path of the Key was selected")
+        except Exception as e:
+            QMessageBox.critical(self, "Key Path Selection Error", f"The selection of the key path failed.\n{str(e)}")
 
         file_path, _ = QFileDialog.getOpenFileName(self, "Open File Path", "", "All Files (*);;")
         QMessageBox.information(self, "File Path Selected", "The File Path was selected")
@@ -153,7 +159,8 @@ class MainWindow(QMainWindow):
         help_window.setCentralWidget(scroll)
         help_window.show()
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-sys.exit(app.exec_())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
